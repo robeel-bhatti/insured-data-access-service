@@ -1,22 +1,23 @@
-import os
 from flask import Flask
+from sqlalchemy import QueuePool
 
 
 class Config:
 
     DEBUG = True
 
-    # Database Configuration - In-Memory SQLite
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_DATABASE_URI = "sqlite://"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_RECORD_QUERIES = True
     SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_pre_ping': True,
-        'pool_recycle': 300,
-        'echo': False  # Set to True for SQL query logging
+        "pool": QueuePool,
+        "pool_recycle": 3600,
+        "pool_pre_ping": True,
     }
 
 
-def create_app():
+def create_app() -> Flask:
     """Application factory pattern."""
 
     app = Flask(__name__)
