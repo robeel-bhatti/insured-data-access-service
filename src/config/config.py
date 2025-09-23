@@ -15,14 +15,6 @@ class Config:
         'echo': False  # Set to True for SQL query logging
     }
 
-    # JSON Configuration
-    JSON_AS_ASCII = False
-    JSON_SORT_KEYS = True
-    JSONIFY_PRETTYPRINT_REGULAR = True
-
-    # Logging
-    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
-
 
 def create_app():
     """Application factory pattern."""
