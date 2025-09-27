@@ -3,7 +3,6 @@ from sqlalchemy import QueuePool
 
 
 class Config:
-
     DEBUG = True
 
     SQLALCHEMY_DATABASE_URI = "sqlite://"
