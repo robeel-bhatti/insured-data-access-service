@@ -6,9 +6,9 @@ repos:
     hooks:
       - id: ruff-check
         args: [ --fix ]
-        stage: [ pre-commit ]
+        stages: [ pre-commit ]
       - id: ruff-format
-        stage: [ pre-commit ]
+        stages: [ pre-commit ]
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v4.9.1
     hooks:
