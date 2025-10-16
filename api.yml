@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.1
 info:
   title: Party Service
   version: 1.0.0
@@ -10,6 +10,9 @@ info:
 servers:
   - url: https://localhost:8080
     description: Dev server
+
+security:
+  - bearerAuth: []
 
 paths:
   /parties/{id}:
@@ -149,6 +152,16 @@ paths:
                 $ref: '#/components/schemas/UnprocessableError'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        JWT-based authentication using Bearer tokens.
+        Include your token in the Authorization header like:
+        `Authorization: Bearer <token>`
+
   schemas:
     PartyCreate:
       type: object
@@ -257,72 +270,48 @@ components:
         - $ref: '#/components/schemas/AddressRequest'
 
     # --- Error Schemas ---
-    BadRequestError:
+    ErrorBase:
       type: object
       properties:
+        timestamp:
+          type: string
+          format: date-time
         status:
           type: integer
-          example: 400
         error:
           type: string
-          example: "Bad Request"
         message:
           type: string
-          example: "Malformed JSON or missing required fields."
-      description: The server cannot process the request because it is malformed.
+        path:
+          type: string
+      required:
+        - timestamp
+        - status
+        - error
+        - message
+        - path
+
+    BadRequestError:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+      description: The request cannot be processed because it is malformed.
 
     UnprocessableError:
-      type: object
-      properties:
-        status:
-          type: integer
-          example: 422
-        error:
-          type: string
-          example: "Unprocessable Entity"
-        message:
-          type: string
-          example: "The email format is invalid or required data is missing."
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
       description: The request is well-formed but contains invalid data.
 
     UnauthorizedError:
-      type: object
-      properties:
-        status:
-          type: integer
-          example: 401
-        error:
-          type: string
-          example: "Unauthorized"
-        message:
-          type: string
-          example: "Authentication is required to access this resource."
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
       description: The request is not authenticated.
 
     ForbiddenError:
-      type: object
-      properties:
-        status:
-          type: integer
-          example: 403
-        error:
-          type: string
-          example: "Forbidden"
-        message:
-          type: string
-          example: "You do not have permission to perform this action."
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
       description: The request is authenticated but not authorized.
 
     NotFoundError:
-      type: object
-      properties:
-        status:
-          type: integer
-          example: 404
-        error:
-          type: string
-          example: "Not Found"
-        message:
-          type: string
-          example: "The requested party was not found."
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
       description: The requested resource could not be found.
