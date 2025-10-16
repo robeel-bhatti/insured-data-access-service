@@ -1,0 +1,317 @@
+openapi: 3.0.1
+info:
+  title: Party Service
+  version: 1.0.0
+  description: CRUD Microservice for Party data
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: https://localhost:8080
+    description: Dev server
+
+security:
+  - bearerAuth: []
+
+paths:
+  /parties/{id}:
+    get:
+      tags: [Party]
+      summary: Get a party by ID
+      operationId: getPartyById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier for the party
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved party
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '404':
+          description: Party not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+
+    patch:
+      tags: [Party]
+      summary: Update a party by ID
+      operationId: updateParty
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier for the party
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyUpdate'
+      responses:
+        '200':
+          description: Successfully updated party
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyResponse'
+        '400':
+          description: Bad request (e.g. malformed JSON)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '404':
+          description: Party not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        '422':
+          description: Unprocessable entity (e.g. failed validation)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableError'
+
+  /parties:
+    post:
+      tags: [Party]
+      summary: Create a new party
+      operationId: createParty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyCreate'
+      responses:
+        '201':
+          description: Successfully created party
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyResponse'
+        '400':
+          description: Bad request (malformed JSON)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenError'
+        '422':
+          description: Unprocessable entity (validation failed)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        JWT-based authentication using Bearer tokens.
+        Include your token in the Authorization header like:
+        `Authorization: Bearer <token>`
+
+  schemas:
+    PartyCreate:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: "John"
+        middleName:
+          type: string
+          example: "A."
+        lastName:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        phoneNumber:
+          type: string
+          example: "+1-555-123-4567"
+        address:
+          $ref: '#/components/schemas/AddressRequest'
+      required:
+        - firstName
+        - lastName
+        - address
+      anyOf:
+        - required: ["email"]
+        - required: ["phoneNumber"]
+      description: >
+        All fields are required except for middleName.
+        At least one of `email` or `phoneNumber` must be provided.
+
+    PartyUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phoneNumber:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressRequest'
+
+    AddressRequest:
+      type: object
+      properties:
+        streetOne:
+          type: string
+          example: "123 Main St"
+        streetTwo:
+          type: string
+          example: "Apt 4B"
+        city:
+          type: string
+          example: "Springfield"
+        state:
+          type: string
+          example: "IL"
+        zip:
+          type: string
+          example: "62704"
+        countryCode:
+          type: string
+          example: "US"
+      required:
+        - streetOne
+        - city
+        - state
+        - zip
+        - countryCode
+
+    PartyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        firstName:
+          type: string
+          example: "John"
+        middleName:
+          type: string
+          example: "A."
+        lastName:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        phoneNumber:
+          type: string
+          example: "+1-555-123-4567"
+        address:
+          $ref: '#/components/schemas/AddressResponse'
+
+    AddressResponse:
+      allOf:
+        - $ref: '#/components/schemas/AddressRequest'
+
+    # --- Error Schemas ---
+    ErrorBase:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+      required:
+        - timestamp
+        - status
+        - error
+        - message
+        - path
+
+    BadRequestError:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+      description: The request cannot be processed because it is malformed.
+
+    UnprocessableError:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+      description: The request is well-formed but contains invalid data.
+
+    UnauthorizedError:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+      description: The request is not authenticated.
+
+    ForbiddenError:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+      description: The request is authenticated but not authorized.
+
+    NotFoundError:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+      description: The requested resource could not be found.

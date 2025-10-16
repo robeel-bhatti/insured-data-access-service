@@ -1,4 +1,4 @@
-name: insured-data-access-service
+name: party-service
 
 services:
   cache:

@@ -1,7 +1,7 @@
 [project]
-name = "insured-data-access-service"
+name = "party-service"
 version = "0.1.0"
-description = "CRUD API for insured data"
+description = "CRUD Microservice for Party data."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
