@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: Party Service
+  version: 1.0.0
+  description: CRUD Microservice for Party data
+
+servers:
+  - url: https://localhost:8080
+    description: Dev server
+
+paths:
+  /parties/{id}:
+    get:
+      summary: Get a party by ID
+      operationId: getPartyById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier for the party
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved party
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Party not found
+    patch:
+      summary: Update a party by ID
+      operationId: updateParty
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier for the party
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyUpdate'
+      responses:
+        '200':
+          description: Successfully updated party
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Party not found
+
+  /parties:
+    post:
+      summary: Create a new party
+      operationId: createParty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyCreate'
+      responses:
+        '201':
+          description: Successfully created party
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyResponse'
+        '400':
+          description: Bad request
+
+components:
+  schemas:
+    PartyCreate:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: "John"
+        middleName:
+          type: string
+          example: "A."
+        lastName:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        phoneNumber:
+          type: string
+          example: "+1-555-123-4567"
+        address:
+          $ref: '#/components/schemas/AddressRequest'
+      required:
+        - firstName
+        - lastName
+        - address
+      anyOf:
+        - required: ["email"]
+        - required: ["phoneNumber"]
+      description: >
+        All fields are required except for middleName.
+        At least one of `email` or `phoneNumber` must be provided.
+
+    PartyUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phoneNumber:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressRequest'
+
+    AddressRequest:
+      type: object
+      properties:
+        streetOne:
+          type: string
+          example: "123 Main St"
+        streetTwo:
+          type: string
+          example: "Apt 4B"
+        city:
+          type: string
+          example: "Springfield"
+        state:
+          type: string
+          example: "IL"
+        zip:
+          type: string
+          example: "62704"
+        countryCode:
+          type: string
+          example: "US"
+      required:
+        - streetOne
+        - city
+        - state
+        - zip
+        - countryCode
+
+    PartyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        firstName:
+          type: string
+          example: "John"
+        middleName:
+          type: string
+          example: "A."
+        lastName:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        phoneNumber:
+          type: string
+          example: "+1-555-123-4567"
+        address:
+          $ref: '#/components/schemas/AddressResponse'
+
+    AddressResponse:
+      allOf:
+        - $ref: '#/components/schemas/AddressRequest'
