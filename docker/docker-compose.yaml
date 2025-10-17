@@ -1,6 +1,14 @@
 name: party-service
 
 services:
+  database:
+    image: postgres:18.0
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: Party
   cache:
     image: redis:8.2.2
     ports:
