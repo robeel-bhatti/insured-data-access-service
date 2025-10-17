@@ -20,5 +20,5 @@ repos:
     rev: v1.5.1
     hooks:
       - id: mypy
-        # may uncomment this line below in the future
-        # args: ["--strict"]
+#        args: [--config-file, pyproject.toml]
+        exclude: ^alembic/
