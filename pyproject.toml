@@ -32,12 +32,6 @@ addopts = [
     "--import-mode=importlib"
 ]
 
-#[tool.mypy]
-#exclude = [
-#    "^alembic/",
-#]
-
-
 [tool.alembic]
 
 # path to migration scripts.
