@@ -3,17 +3,21 @@ from typing import Optional
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from models.base import Base
-from models.party import Party
+from src.models.base import Base
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.models.party import Party
 
 
 class PartyHistory(Base):
     """Party history table model - stores historical versions of party records"""
 
     __tablename__ = "party_history"
+    __table_args__ = {"schema": "party_service"}
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    party_id: Mapped[int] = mapped_column(ForeignKey("party.id"))
+    party_id: Mapped[int] = mapped_column(ForeignKey("party_service.party.id"))
     first_name: Mapped[str] = mapped_column(String(100))
     last_name: Mapped[str] = mapped_column(String(100))
     middle_name: Mapped[Optional[str]] = mapped_column(String(100))
