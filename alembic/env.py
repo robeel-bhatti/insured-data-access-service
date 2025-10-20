@@ -4,12 +4,13 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from src.models.address import Base as Base1
+from src.models.base import Base
 
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(".flaskenv")
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -23,7 +24,7 @@ if config.config_file_name is not None:
 # add your model's MetaData object here
 # for 'autogenerate' support
 
-target_metadata = [Base1.metadata]
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -43,6 +44,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
+
     url = os.getenv("DATABASE_URL")
     context.configure(
         url=url,
@@ -63,7 +65,7 @@ def run_migrations_online() -> None:
 
     """
     cfg = config.get_section(config.config_ini_section, {})
-    cfg["url"] = os.getenv("DATABASE_URL")
+    cfg["sqlalchemy.url"] = os.getenv("DATABASE_URL")
 
     connectable = engine_from_config(
         cfg,
