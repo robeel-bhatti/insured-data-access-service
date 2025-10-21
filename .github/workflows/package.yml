@@ -1,0 +1,22 @@
+name: Package Party Service
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  build:
+    name: Package
+    runs-on: [ubuntu-latest, macos-latest, windows-latest]
+    permissions: write-all
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        python-version: ["3.13"]
+    steps:
+      - name: Git checkout repository
+        uses: actions/checkout@v5
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
+      - name: Install python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
