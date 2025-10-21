@@ -6,13 +6,15 @@ on:
 
 jobs:
   build:
-    name: Package
-    runs-on: [ubuntu-latest, macos-latest, windows-latest]
-    permissions: write-all
-    timeout-minutes: 5
     strategy:
       matrix:
-        python-version: ["3.13"]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [ "3.13" ]
+    name: Package
+    runs-on: ${{ matrix.os }}
+    permissions: write-all
+    timeout-minutes: 5
+
     steps:
       - name: Git checkout repository
         uses: actions/checkout@v5
