@@ -2,7 +2,8 @@ name: Package Party Service
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [ opened, reopened ]
+  push:
 
 jobs:
   build:
