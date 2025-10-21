@@ -10,6 +10,8 @@ dependencies = [
     "python-dotenv>=1.1.1",
     "flask-caching>=2.3.1",
     "redis>=6.4.0",
+    "alembic>=1.17.0",
+    "psycopg2-binary>=2.9.11",
 ]
 
 [dependency-groups]
@@ -30,3 +32,23 @@ testpaths = [
 addopts = [
     "--import-mode=importlib"
 ]
+
+[tool.alembic]
+
+# path to migration scripts.
+# this is typically a path given in POSIX (e.g. forward slashes)
+# format, relative to the token %(here)s which refers to the location of this
+# ini file
+script_location = "%(here)s/alembic"
+
+# additional paths to be prepended to sys.path. defaults to the current working directory.
+prepend_sys_path = [
+    "."
+]
+
+
+[post_write_hooks]
+hooks = "pre_commit"
+pre_commit.type = "console_scripts"
+pre_commit.entrypoint = "pre-commit"
+pre_commit.options = "run --files REVISION_SCRIPT_FILENAME"

@@ -20,5 +20,7 @@ repos:
     rev: v1.5.1
     hooks:
       - id: mypy
-        # may uncomment this line below in the future
-        # args: ["--strict"]
+        args: [--strict, --ignore-missing-imports, --explicit-package-bases]
+        exclude: ^alembic/
+        additional_dependencies:
+          - sqlalchemy>=2.0.43
