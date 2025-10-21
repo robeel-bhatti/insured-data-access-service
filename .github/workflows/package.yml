@@ -10,16 +10,19 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [ "3.13" ]
-    name: Package
+        python-version: [ 3.13 ]
+    name: Install UV
     runs-on: ${{ matrix.os }}
     permissions: write-all
     timeout-minutes: 5
-
     steps:
       - name: Git checkout repository
         uses: actions/checkout@v5
       - name: Install UV
         uses: astral-sh/setup-uv@v7
-      - name: Install python ${{ matrix.python-version }}
-        run: uv python install ${{ matrix.python-version }}
+        with:
+          enable-cache: true
+      - name: Install python
+        run: uv python install
+      - name: Install project dependencies
+        run: uv sync
