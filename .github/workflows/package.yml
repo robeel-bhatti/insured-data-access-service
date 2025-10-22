@@ -27,6 +27,6 @@ jobs:
       - name: Install project dependencies
         run: uv sync
       - name: Run Ruff linter
-        run: ruff check --fix --output-format=github
+        run: uv run ruff check --fix --output-format=github
       - name: Run Ruff formatter
-        run: ruff format
+        run: uv run ruff format
