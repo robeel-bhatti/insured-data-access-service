@@ -14,6 +14,7 @@ def create_app() -> Flask:
 
     app = Flask(__name__)
     app.config.from_object(Config)
+    init_db(app)
     return app
 
 
@@ -26,7 +27,9 @@ def init_db(app: Flask) -> None:
 
     url = os.getenv("DATABASE_URL")
     if url is None:
-        raise Exception("DATABASE_URL is not set")
+        raise Exception(
+            "App failed to start because the environment variable 'DATABASE_URL' is not set"
+        )
 
     engine = create_engine(url, **options)
     session = sessionmaker(bind=engine)
