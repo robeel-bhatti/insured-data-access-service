@@ -31,4 +31,4 @@ jobs:
       - name: Run Ruff formatter
         run: uv run ruff format
       - name: Run unit tests
-        run: uv run pytest --cov=party-service
+        run: uv run pytest --cov=party-service /tests/unit
