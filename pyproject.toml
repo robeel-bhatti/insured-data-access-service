@@ -8,7 +8,6 @@ dependencies = [
     "flask>=3.1.2",
     "sqlalchemy>=2.0.43",
     "python-dotenv>=1.1.1",
-    "flask-caching>=2.3.1",
     "redis>=6.4.0",
     "alembic>=1.17.0",
     "psycopg2-binary>=2.9.11",
