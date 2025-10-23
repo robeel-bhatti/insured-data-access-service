@@ -24,3 +24,4 @@ repos:
         exclude: ^alembic/
         additional_dependencies:
           - sqlalchemy>=2.0.43
+          - redis>=6.4.0
