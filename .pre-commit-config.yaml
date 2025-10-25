@@ -25,3 +25,4 @@ repos:
         additional_dependencies:
           - sqlalchemy>=2.0.43
           - redis>=6.4.0
+          - types-Flask>=1.1.6
