@@ -24,3 +24,10 @@ class AbstractRepository(ABC, Generic[T]):
     @abstractmethod
     def delete(self, id: int) -> T:
         pass
+
+
+# TODO: Add party repository
+# TODO: Add address repository
+# TODO: Session object in repository or service?
+# TODO: Commit/Rollback in repository or service?
+# TODO: Add teardown handler to close all DB sessions
