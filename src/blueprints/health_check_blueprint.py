@@ -10,3 +10,7 @@ class HealthCheck(MethodView):
     @hc_blp.response(200)  # type: ignore
     def get(self) -> dict[str, str]:
         return {"message": "Party Service is healthy"}
+
+
+# TODO: add cache and repository classes
+# TODO: add teardown request methods, and see if session closes after every request
