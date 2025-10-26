@@ -1,10 +1,10 @@
 from datetime import datetime
-from typing import Optional
-from sqlalchemy import String, ForeignKey
+from typing import TYPE_CHECKING, Optional
+
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.models.party import Party

@@ -1,8 +1,9 @@
-from typing import Optional, List
+from typing import TYPE_CHECKING, List, Optional
+
 from sqlalchemy import String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from src.models.base import Base
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.models.party import Party

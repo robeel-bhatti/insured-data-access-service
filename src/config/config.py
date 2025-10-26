@@ -1,14 +1,15 @@
-from flask import Flask
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy import QueuePool
-from redis import Redis
 import os
+from typing import Optional
+
+from flask import Flask
 from flask_smorest import Api
+from redis import Redis
+from sqlalchemy import QueuePool, create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+
 from src.blueprints.health_check_blueprint import hc_blp
 from src.blueprints.party_blueprint import party_blp
 from src.config.container import Container
-from typing import Optional
 
 
 class Config:

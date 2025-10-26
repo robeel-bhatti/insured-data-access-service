@@ -1,5 +1,5 @@
-from flask_smorest import Blueprint
 from flask.views import MethodView
+from flask_smorest import Blueprint
 
 party_blp = Blueprint("party", __name__)
 
