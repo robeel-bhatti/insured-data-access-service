@@ -1,6 +1,5 @@
-from flask_smorest import Blueprint
 from flask.views import MethodView
-
+from flask_smorest import Blueprint
 
 hc_blp = Blueprint("health", "health")
 

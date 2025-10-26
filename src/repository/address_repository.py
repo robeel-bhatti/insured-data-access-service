@@ -1,6 +1,7 @@
+from sqlalchemy.orm import Session
+
 from src.models.address import Address
 from src.repository.abstract_repository import AbstractRepository
-from sqlalchemy.orm import Session
 
 
 class AddressRepository(AbstractRepository[Address]):

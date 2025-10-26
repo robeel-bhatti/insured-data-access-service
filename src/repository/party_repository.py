@@ -1,6 +1,7 @@
-from src.repository.abstract_repository import AbstractRepository
-from src.models.party import Party
 from sqlalchemy.orm import Session
+
+from src.models.party import Party
+from src.repository.abstract_repository import AbstractRepository
 
 
 class PartyRepository(AbstractRepository[Party]):
