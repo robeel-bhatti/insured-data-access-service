@@ -6,6 +6,9 @@ from redis import Redis
 import os
 from flask_smorest import Api
 from src.blueprints.health_check_blueprint import hc_blp
+from src.blueprints.party_blueprint import party_blp
+from src.config.container import Container
+from typing import Optional
 
 
 class Config:
@@ -17,14 +20,23 @@ class Config:
 
 def create_app() -> Flask:
     """Application factory pattern."""
-
     app = Flask(__name__)
     app.config.from_object(Config)
+
     init_db(app)
     init_cache(app)
+    init_di(app)
+
     api = Api(app)
     api.register_blueprint(hc_blp)
+    api.register_blueprint(party_blp)
+
     return app
+
+
+def init_di(app: Flask) -> None:
+    container = Container(app.session())
+    app.container = container
 
 
 def init_db(app: Flask) -> None:
@@ -42,8 +54,12 @@ def init_db(app: Flask) -> None:
 
     engine = create_engine(url, **options)
     session_factory = sessionmaker(bind=engine)
-    Session = scoped_session(session_factory)
-    app.session = Session()
+    app.session = scoped_session(session_factory)
+
+    @app.teardown_appcontext
+    def close_session(exc: Optional[Exception] = None) -> None:
+        if hasattr(app, "session"):
+            app.session.remove()
 
 
 def init_cache(app: Flask) -> None:
