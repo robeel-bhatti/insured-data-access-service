@@ -1,5 +1,3 @@
-from typing import Optional
-
 from sqlalchemy.orm import Session
 
 from src.models.address import Address
@@ -17,7 +15,7 @@ class Container:
         self._unit_of_work: UnitOfWork | None = None
         self._party_repository: AbstractRepository[Party] | None = None
         self._address_repository: AbstractRepository[Address] | None = None
-        self._party_service: Optional[PartyService] = None
+        self._party_service: PartyService | None = None
 
     @property
     def party_repository(self) -> AbstractRepository[Party]:
